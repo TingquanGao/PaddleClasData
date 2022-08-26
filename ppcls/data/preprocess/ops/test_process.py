@@ -24,7 +24,7 @@ def get_region(img, percent_x=None, percent_y=None, area_ratio=None, aspect_rati
         tuple: the location of region
     """
     height, width, channels = img.shape
-    
+
     if percent_x:
         coordinate_x = int(width * percent_x)
     else:
@@ -101,17 +101,17 @@ def paste(back_img, fore_img, region, transparent=True):
         numpy.ndarray: the synthesized image
     """
     x, y, w, h = region
-    colors = list(PIL.ImageColor.colormap.keys()) 
+    colors = list(PIL.ImageColor.colormap.keys())
     if transparent:
         colors += ["transparent"]
-    
+
     bg_c, fg_c = random.choices(colors, k=2)
     if fg_c == "transparent":
         fg_c, bg_c = bg_c, fg_c
-        
+
     fg_rgb = PIL.ImageColor.getrgb(PIL.ImageColor.colormap[fg_c])
     fore_img = replace_color(fore_img, (0, 0, 0), fg_rgb)
-    
+
     if bg_c == "transparent":
         roi = back_img[y:y+h, x:x+w, :]
         mask = fore_img[:, :, 0]
@@ -166,7 +166,7 @@ class DoBlur(object):
     """
     def __init__(self, ratio=0.5):
         self.ratio = ratio
-    
+
     def __call__(self, **kwargs):
         img = kwargs["img"]
         if random.random() > self.ratio:
@@ -205,7 +205,8 @@ class DoMosaic(object):
             region = get_region(img)
             x, y, w, h = region
 
-            method = random.choices(["mosaic", "avg", "median", "gaussian", "bilateral"], weights=[4, 1, 1, 1, 1])
+            method = random.choices(["mosaic"], weights=[1])
+            #method = random.choices(["mosaic", "avg", "median", "gaussian", "bilateral"], weights=[4, 1, 1, 1, 1])
             if method == "avg":
                 img[x:x+w, y:y+h, :] = avg_blur(img[x:x+w, y:y+h, :])
             elif method == "median":
