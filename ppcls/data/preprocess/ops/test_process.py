@@ -342,13 +342,27 @@ def DoQrcode(img):
     return img
 
 
+class DoRotate(object):
+    def __init__(self):
+        pass
+
+    def __call__(self, **kwargs):
+        img = kwargs["img"]
+        label = random.choice([0, 1, 2, 3])
+        if label:
+            img = np.rot90(img, label)
+        return {**kwargs, "img": img, "label": label}
+
+
 def main():
-    img = cv2.imread('test.jpeg')
-    img = do_mosaic(img)
-    # img = do_blur(img)
-    # img = do_qrcode(img)
-    # img = do_noisy(img)
-    # img = do_barcode(img)
+    func = DoRotate()
+    img_path = "./test.jpg"
+    img = cv2.imread(img_path)
+    data = func(**{"img": img})
+    img = data["img"]
+    label = data["label"]
+    print("=======================")
+    print(label)
     cv2.imwrite("processed_img.jpeg", img)
 
 
