@@ -31,26 +31,22 @@ class TestDataset(CommonDataset):
             self,
             image_root,
             cls_label_path,
-            transform_ops=None,
-            delimiter=None):
-        self.delimiter = delimiter if delimiter is not None else " "
+            transform_ops=None):
         super().__init__(image_root, cls_label_path, transform_ops)
 
     def _load_anno(self, seed=None):
         assert os.path.exists(self._cls_path)
         assert os.path.exists(self._img_root)
-        
+
         self.images = []
-        self.labels = []
 
         with open(self._cls_path) as fd:
             lines = fd.readlines()
             if seed is not None:
                 np.random.RandomState(seed).shuffle(lines)
             for l in lines:
-                l = l.strip().split(self.delimiter)
-                self.images.append(os.path.join(self._img_root, l[0]))
-                self.labels.append(np.int64(l[1]))
+                l = l.strip()
+                self.images.append(os.path.join(self._img_root, l))
                 assert os.path.exists(self.images[-1])
 
     def __getitem__(self, idx):

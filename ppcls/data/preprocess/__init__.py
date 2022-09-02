@@ -102,7 +102,8 @@ class TimmAutoAugment(RawTimmAutoAugment):
         super().__init__(*args, **kwargs)
         self.prob = prob
 
-    def __call__(self, img):
+    def __call__(self, **kwargs):
+        img = kwargs["img"]
         if not isinstance(img, Image.Image):
             img = np.ascontiguousarray(img)
             img = Image.fromarray(img)
@@ -111,4 +112,4 @@ class TimmAutoAugment(RawTimmAutoAugment):
         if isinstance(img, Image.Image):
             img = np.asarray(img)
 
-        return img
+        return {**kwargs, "img": img}
