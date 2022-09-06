@@ -422,8 +422,10 @@ class Engine(object):
         for idx, image_file in enumerate(image_list):
             with open(image_file, 'rb') as f:
                 x = f.read()
+            data = {"img": x}
             for process in self.preprocess_func:
-                x = process(x)
+                data = process(**data)
+            x = data["img"]
             batch_data.append(x)
             image_file_list.append(image_file)
             if len(batch_data) >= batch_size or idx == len(image_list) - 1:

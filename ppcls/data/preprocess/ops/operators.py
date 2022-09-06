@@ -138,12 +138,12 @@ class OperatorParamError(ValueError):
 class ToRGB(object):
     def __init__(self):
         pass
-    
+
     def __call__(self, **kwargs):
         img = kwargs["img"]
         assert img.shape[2] == 3, 'invalid shape of image[%s]' % (img.shape)
         img = img[:, :, ::-1]
-        return {**kwargs, "img": img} 
+        return {**kwargs, "img": img}
 
 
 class DecodeImage(object):
@@ -561,12 +561,13 @@ class ToCHWImage(object):
     def __init__(self):
         pass
 
-    def __call__(self, img):
+    def __call__(self, **kwargs):
+        img = kwargs["img"]
         from PIL import Image
         if isinstance(img, Image.Image):
             img = np.array(img)
 
-        return img.transpose((2, 0, 1))
+        return {**kwargs, "img": img.transpose(2, 0, 1)}
 
 
 class AugMix(object):
