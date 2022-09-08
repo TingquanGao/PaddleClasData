@@ -9,6 +9,8 @@ import qrcode
 import barcode
 from barcode.writer import ImageWriter
 
+import paddleclas
+
 
 def get_region(img, percent_x=None, percent_y=None, area_ratio=None, aspect_ratio=None):
     """random a region from the image
@@ -352,6 +354,18 @@ class DoRotate(object):
         if label:
             img = np.rot90(img, label)
         return {**kwargs, "img": img, "label": label}
+
+
+class DoCorrecte(object):
+    def __init__(self):
+        self.model = paddleclas.PaddleClas(model_name="image_orientation")
+    
+    def __call__(self, **kwargs):
+        img = kwargs["img"]
+        result = self.model.predict(input_data=img)
+        class_ids = next(result)[0]["class_ids"][0]
+        img = np.rot90(img, class_ids * -1)
+        return {**kwargs, "img": img}
 
 
 def main():

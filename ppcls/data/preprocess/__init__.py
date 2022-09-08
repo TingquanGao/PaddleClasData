@@ -41,7 +41,7 @@ from ppcls.data.preprocess.ops.operators import RandomCropImage
 from ppcls.data.preprocess.ops.operators import Padv2
 from ppcls.data.preprocess.ops.operators import ToRGB
 
-from .ops.test_process import DoBlur, DoBarcode, DoMosaic, DoQrcode, DoNoisy, DoRotate
+from .ops.test_process import DoBlur, DoBarcode, DoMosaic, DoQrcode, DoNoisy, DoRotate, DoCorrecte
 
 from ppcls.data.preprocess.batch_ops.batch_operators import MixupOperator, CutmixOperator, OpSampler, FmixOperator
 
