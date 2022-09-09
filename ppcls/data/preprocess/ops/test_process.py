@@ -368,16 +368,53 @@ class DoCorrecte(object):
         return {**kwargs, "img": img}
 
 
+class DoStretch(object):
+    def __init__(self, f=2):
+        self.f = float(f)
+        self.f_ = 1 / self.f
+    
+    def __call__(self, **kwargs):
+        img = kwargs["img"]
+        height, width, channels = img.shape
+        ratio = np.float32(height / width)
+        new_r = random.uniform(self.f_ * ratio, self.f * ratio)
+        if new_r > ratio:
+            new_height = int(new_r * height)
+            new_width = width
+        else:
+            new_height = height
+            new_width = int(height / new_r)
+        
+        img = cv2.resize(img, (new_width, new_height))
+        return {**kwargs, "img": img, "label": ratio}
+
+
 def main():
-    func = DoRotate()
-    img_path = "./test.jpg"
-    img = cv2.imread(img_path)
-    data = func(**{"img": img})
-    img = data["img"]
-    label = data["label"]
-    print("=======================")
-    print(label)
-    cv2.imwrite("processed_img.jpeg", img)
+    import os
+    func = DoStretch()
+
+    list_path = "/paddle/data/clas/ILSVRC2012_val/val_list.txt"
+    dir_path = "/paddle/data/clas/ILSVRC2012_val/"
+    with open(list_path) as f:
+        lines = f.readlines()
+
+    new_dir = "/paddle/data/Strech/"
+    new_list = []
+    new_list_path = "/paddle/data/Strech/val_list.txt"
+    for line in lines:
+        img_path = line.strip().split()[0]
+        img = cv2.imread(os.path.join(dir_path, img_path))
+        data = func(**{"img": img})
+        img = data["img"]
+        label = data["label"]
+        new_list.append(f"{img_path} {label}")
+        img_path = os.path.join(new_dir, img_path)
+        parent_dir = os.path.dirname(img_path)
+        os.makedirs(parent_dir, exist_ok=True)
+        cv2.imwrite(img_path, img)
+
+    with open(new_list_path, "w+") as f:
+        f.write("\n".join(new_list))
 
 
 if __name__ == "__main__":

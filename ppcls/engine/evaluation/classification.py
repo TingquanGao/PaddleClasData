@@ -56,7 +56,7 @@ def classification_eval(engine, epoch_id=0):
         batch_size = batch[0].shape[0]
         batch[0] = paddle.to_tensor(batch[0])
         if not engine.config["Global"].get("use_multilabel", False):
-            batch[1] = batch[1].reshape([-1, 1]).astype("int64")
+            batch[1] = batch[1].reshape([-1, 1])
 
         # image input
         if engine.amp and engine.amp_eval:

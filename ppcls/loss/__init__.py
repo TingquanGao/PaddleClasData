@@ -32,6 +32,8 @@ from .deephashloss import DSHSDLoss
 from .deephashloss import LCDSHLoss
 from .deephashloss import DCHLoss
 
+from .mseloss import MSELoss
+
 
 class CombinedLoss(nn.Layer):
     def __init__(self, config_list):

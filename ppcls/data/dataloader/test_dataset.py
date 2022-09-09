@@ -39,14 +39,16 @@ class TestDataset(CommonDataset):
         assert os.path.exists(self._img_root)
 
         self.images = []
+        self.labels = []
 
         with open(self._cls_path) as fd:
             lines = fd.readlines()
             if seed is not None:
                 np.random.RandomState(seed).shuffle(lines)
             for l in lines:
-                l = l.strip()
-                self.images.append(os.path.join(self._img_root, l))
+                l = l.strip().split()
+                self.images.append(os.path.join(self._img_root, l[0]))
+                self.labels.append(np.float32(l[1]) if len(l) == 2 else None)
                 assert os.path.exists(self.images[-1])
 
     def __getitem__(self, idx):
@@ -54,7 +56,7 @@ class TestDataset(CommonDataset):
             with open(self.images[idx], 'rb') as f:
                 img = f.read()
             if self._transform_ops:
-                data = transform({"img": img, "label": None}, self._transform_ops)
+                data = transform({"img": img, "label": self.labels[idx]}, self._transform_ops)
             img = data["img"].transpose((2, 0, 1))
             return (img, data["label"])
 
