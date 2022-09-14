@@ -36,7 +36,7 @@ Optimizer:
   momentum: 0.9
   lr:
     name: Cosine
-    learning_rate: 0.16
+    learning_rate: 0.56
     warmup_epoch: 5
   regularizer:
     name: 'L2'
@@ -48,8 +48,8 @@ DataLoader:
   Train:
     dataset:
       name: TestDataset
-      image_root: ./dataset/Orientation/
-      cls_label_path: ./dataset/Orientation/train_list.txt
+      image_root: /paddle/data/clas/rotate/dataset
+      cls_label_path: /paddle/data/clas/rotate/dataset/train_list.txt
       transform_ops:
         - DecodeImage:
             to_rgb: False
@@ -82,14 +82,14 @@ DataLoader:
       drop_last: False
       shuffle: True
     loader:
-      num_workers: 4
+      num_workers: 10
       use_shared_memory: True
 
   Eval:
     dataset: 
       name: ImageNetDataset
-      image_root: ./dataset/Orientation/
-      cls_label_path: ./dataset/Orientation/val_list.txt
+      image_root: /paddle/data/clas/rotate/dataset
+      cls_label_path: /paddle/data/clas/rotate/dataset/val_list.txt
       transform_ops:
         - DecodeImage:
             to_rgb: True
