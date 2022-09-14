@@ -77,7 +77,7 @@ DataLoader:
             mode: pixel
     sampler:
       name: DistributedBatchSampler
-      batch_size: 2
+      batch_size: 512
       drop_last: False
       shuffle: True
     loader:
