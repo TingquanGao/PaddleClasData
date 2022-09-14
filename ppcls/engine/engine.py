@@ -353,18 +353,19 @@ class Engine(object):
                     "eval_during_train"] and epoch_id % self.config["Global"][
                         "eval_interval"] == 0 and epoch_id > start_eval_epoch:
                 acc = self.eval(epoch_id)
-                if acc > best_metric["metric"]:
-                    best_metric["metric"] = acc
-                    best_metric["epoch"] = epoch_id
-                    save_load.save_model(
-                        self.model,
-                        self.optimizer,
-                        best_metric,
-                        self.output_dir,
-                        model_name=self.config["Arch"]["name"],
-                        prefix="best_model",
-                        loss=self.train_loss_func,
-                        save_student_model=True)
+                if acc is not None:
+                    if acc > best_metric["metric"]:
+                        best_metric["metric"] = acc
+                        best_metric["epoch"] = epoch_id
+                        save_load.save_model(
+                            self.model,
+                            self.optimizer,
+                            best_metric,
+                            self.output_dir,
+                            model_name=self.config["Arch"]["name"],
+                            prefix="best_model",
+                            loss=self.train_loss_func,
+                            save_student_model=True)
                 logger.info("[Eval][Epoch {}][best metric: {}]".format(
                     epoch_id, best_metric["metric"]))
                 logger.scaler(

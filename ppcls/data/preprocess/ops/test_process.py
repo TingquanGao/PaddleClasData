@@ -359,7 +359,7 @@ class DoRotate(object):
 class DoCorrecte(object):
     def __init__(self):
         self.model = paddleclas.PaddleClas(model_name="image_orientation")
-    
+
     def __call__(self, **kwargs):
         img = kwargs["img"]
         result = self.model.predict(input_data=img)
@@ -372,7 +372,7 @@ class DoStretch(object):
     def __init__(self, f=2):
         self.f = float(f)
         self.f_ = 1 / self.f
-    
+
     def __call__(self, **kwargs):
         img = kwargs["img"]
         height, width, channels = img.shape
@@ -384,9 +384,24 @@ class DoStretch(object):
         else:
             new_height = height
             new_width = int(height / new_r)
-        
+
         img = cv2.resize(img, (new_width, new_height))
         return {**kwargs, "img": img, "label": ratio}
+
+
+class GetAttr(object):
+    def __init__(self):
+        pass
+
+    def __call__(self, **kwargs):
+        img = kwargs["img"]
+        hls = cv2.cvtColor(img, cv2.COLOR_BGR2HLS)
+        # h, s, l = cv2.split(hls)
+        brightness = np.mean(hls[:, :, 1])
+        saturation = np.mean(hls[:, :, 2])
+        contrast = 100
+        #return {**kwargs, "label": np.array([brightness, saturation, contrast], dtype="float32")}
+        return {**kwargs, "label": np.array([brightness], dtype="float32")}
 
 
 def main():

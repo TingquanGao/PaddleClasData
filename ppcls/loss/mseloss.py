@@ -26,11 +26,12 @@ class MSELoss(nn.Layer):
     Cross entropy loss
     """
 
-    def __init__(self):
+    def __init__(self, reduction="mean"):
         super().__init__()
+        self.reduction = reduction
 
     def forward(self, x, label):
         if isinstance(x, dict):
             x = x["logits"]
-        loss = F.mse_loss(x, label=label, reduction='mean')
+        loss = F.mse_loss(x, label=label, reduction=self.reduction)
         return {"MSELoss": loss}
