@@ -19,7 +19,7 @@ Arch:
   name: PPLCNet_x1_0
   pretrained: True
   use_ssld: True
-  class_num: 3
+  class_num: 1
 
 # loss function config for traing/eval process
 Loss:
