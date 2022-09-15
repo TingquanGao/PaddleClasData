@@ -14,6 +14,16 @@ Global:
 
 PreProcess:
   transform_ops:
+    - ResizeImage:
+        resize_short: 256
+    - CropImage:
+        size: 224
+    - NormalizeImage:
+        scale: 0.00392157
+        mean: [0.485, 0.456, 0.406]
+        std: [0.229, 0.224, 0.225]
+        order: ''
+        channel_num: 3
     - ToCHWImage:
 
 PostProcess:

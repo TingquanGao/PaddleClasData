@@ -79,8 +79,11 @@ DataLoader:
       cls_label_path: ./dataset/ILSVRC2012/val_list.txt
       transform_ops:
         - DecodeImage:
-            to_rgb: True
+            to_rgb: False
             channel_first: False
+        - DoCorrecte:
+            threshhold: 0
+        - ToRGB:
         - ResizeImage:
             resize_short: 256
         - CropImage:
@@ -90,7 +93,6 @@ DataLoader:
             mean: [0.485, 0.456, 0.406]
             std: [0.229, 0.224, 0.225]
             order: ''
-        - DoCorrecte:
     sampler:
       name: DistributedBatchSampler
       batch_size: 64
