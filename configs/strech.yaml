@@ -4,10 +4,10 @@ Global:
   pretrained_model: null
   output_dir: ./output/
   device: gpu
-  save_interval: 60
+  save_interval: 10
   eval_during_train: True
-  eval_interval: 1
-  epochs: 60
+  eval_interval: 10
+  epochs: 20
   print_batch_step: 10
   use_visualdl: False
   # used for static mode and model export
@@ -35,7 +35,7 @@ Optimizer:
   momentum: 0.9
   lr:
     name: Cosine
-    learning_rate: 0.56
+    learning_rate: 0.2
     warmup_epoch: 5
   regularizer:
     name: 'L2'
@@ -112,7 +112,7 @@ DataLoader:
       use_shared_memory: True
 
 Infer:
-  infer_imgs: ./dataset/Orientation/coco/
+  infer_imgs: ./dataset/test_imgs/
   batch_size: 1
   transforms:
     - DecodeImage:
