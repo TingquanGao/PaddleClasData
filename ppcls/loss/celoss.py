@@ -44,6 +44,7 @@ class CELoss(nn.Layer):
     def forward(self, x, label):
         if isinstance(x, dict):
             x = x["logits"]
+        label = label.astype("int64")
         if self.epsilon is not None:
             class_num = x.shape[-1]
             label = self._labelsmoothing(label, class_num)
