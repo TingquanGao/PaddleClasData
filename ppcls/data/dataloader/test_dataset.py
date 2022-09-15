@@ -56,7 +56,7 @@ class TestDataset(CommonDataset):
             with open(self.images[idx], 'rb') as f:
                 img = f.read()
             if self._transform_ops:
-                data = transform({"img": img, "label": self.labels[idx]}, self._transform_ops)
+                data = transform({"img_path": self.images[idx], "img": img, "label": self.labels[idx]}, self._transform_ops)
             img = data["img"].transpose((2, 0, 1))
             return (img, data["label"])
 

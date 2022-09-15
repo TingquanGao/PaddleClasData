@@ -357,14 +357,17 @@ class DoRotate(object):
 
 
 class DoCorrecte(object):
-    def __init__(self):
+    def __init__(self, threshhold=0.5):
         self.model = paddleclas.PaddleClas(model_name="image_orientation")
+        self.threshhold = threshhold
 
     def __call__(self, **kwargs):
         img = kwargs["img"]
-        result = self.model.predict(input_data=img)
-        class_ids = next(result)[0]["class_ids"][0]
-        img = np.rot90(img, class_ids * -1)
+        result = next(self.model.predict(input_data=img))[0]
+        class_ids = result["class_ids"][0]
+        score = result["scores"][0]
+        if class_ids != 0 and score > self.threshhold:
+            img = np.rot90(img, class_ids * -1)
         return {**kwargs, "img": img}
 
 
@@ -399,6 +402,7 @@ class GetAttr(object):
         # h, s, l = cv2.split(hls)
         brightness = np.mean(hls[:, :, 1])
         saturation = np.mean(hls[:, :, 2])
+        # TODO
         contrast = 100
         #return {**kwargs, "label": np.array([brightness, saturation, contrast], dtype="float32")}
         return {**kwargs, "label": np.array([brightness], dtype="float32")}
@@ -406,16 +410,16 @@ class GetAttr(object):
 
 def main():
     import os
-    func = DoStretch()
+    func = DoRotate()
 
     list_path = "/paddle/data/clas/ILSVRC2012_val/val_list.txt"
     dir_path = "/paddle/data/clas/ILSVRC2012_val/"
     with open(list_path) as f:
         lines = f.readlines()
 
-    new_dir = "/paddle/data/Strech/"
+    new_dir = "/paddle/data/Rotate/"
     new_list = []
-    new_list_path = "/paddle/data/Strech/val_list.txt"
+    new_list_path = "/paddle/data/Rotate/val_list.txt"
     for line in lines:
         img_path = line.strip().split()[0]
         img = cv2.imread(os.path.join(dir_path, img_path))

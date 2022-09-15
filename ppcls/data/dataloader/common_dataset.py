@@ -82,7 +82,7 @@ class CommonDataset(Dataset):
         with open(self.images[idx], 'rb') as f:
             img = f.read()
         if self._transform_ops:
-            data = transform({"img": img, "label": None}, self._transform_ops)
+            data = transform({"img_path": self.images[idx], "img": img, "label": None}, self._transform_ops)
         img = data["img"].transpose((2, 0, 1))
         return (img, self.labels[idx])
 

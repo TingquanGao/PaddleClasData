@@ -4,10 +4,10 @@ Global:
   pretrained_model: null
   output_dir: ./output/
   device: gpu
-  save_interval: 60
+  save_interval: 10
   eval_during_train: True
-  eval_interval: 1
-  epochs: 60
+  eval_interval: 10
+  epochs: 20
   print_batch_step: 10
   use_visualdl: False
   # used for static mode and model export
@@ -82,14 +82,14 @@ DataLoader:
       drop_last: False
       shuffle: True
     loader:
-      num_workers: 10
+      num_workers: 16
       use_shared_memory: True
 
   Eval:
     dataset: 
       name: ImageNetDataset
-      image_root: /paddle/data/clas/rotate/dataset
-      cls_label_path: /paddle/data/clas/rotate/dataset/val_list.txt
+      image_root: /paddle/data/clas/rotate/dataset/val
+      cls_label_path: /paddle/data/clas/rotate/dataset/val/val_list.txt
       transform_ops:
         - DecodeImage:
             to_rgb: True
@@ -113,7 +113,7 @@ DataLoader:
       use_shared_memory: True
 
 Infer:
-  infer_imgs: ./dataset/Orientation/coco/
+  infer_imgs: ./test_img/
   batch_size: 1
   transforms:
     - DecodeImage:
